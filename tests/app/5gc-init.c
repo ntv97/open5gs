@@ -31,6 +31,7 @@ static ogs_thread_t *pcf_thread = NULL;
 static ogs_thread_t *nssf_thread = NULL;
 static ogs_thread_t *bsf_thread = NULL;
 static ogs_thread_t *udr_thread = NULL;
+static ogs_thread_t *nef_thread = NULL;
 
 int app_initialize(const char *const argv[])
 {
@@ -79,6 +80,8 @@ int app_initialize(const char *const argv[])
         bsf_thread = test_child_create("bsf", argv_out);
     if (ogs_global_conf()->parameter.no_udr == 0)
         udr_thread = test_child_create("udr", argv_out);
+    if (ogs_global_conf()->parameter.no_nef == 0)
+        nef_thread = test_child_create("nef", argv_out);
 
     /*
      * Wait for all sockets listening
