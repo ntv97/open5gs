@@ -122,12 +122,12 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
             CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA)
                 SWITCH(message.h.resource.component[2])
                 CASE(OGS_SBI_RESOURCE_NAME_AUTHENTICATION_DATA)
-                    nef_nnef_dr_handle_subscription_authentication(
+                    nnef_dr_handle_subscription_authentication(
                             stream, &message);
                     break;
 
                 CASE(OGS_SBI_RESOURCE_NAME_CONTEXT_DATA)
-                    nef_nnef_dr_handle_subscription_context(stream, &message);
+                    nnef_dr_handle_subscription_context(stream, &message);
                     break;
 
                 DEFAULT
@@ -135,7 +135,7 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
                     CASE(OGS_SBI_RESOURCE_NAME_PROVISIONED_DATA)
                         SWITCH(message.h.method)
                         CASE(OGS_SBI_HTTP_METHOD_GET)
-                            nef_nnef_dr_handle_subscription_provisioned(
+                            nnef_dr_handle_subscription_provisioned(
                                     stream, &message);
                             break;
                         DEFAULT
@@ -161,7 +161,7 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
                 break;
 
             CASE(OGS_SBI_RESOURCE_NAME_POLICY_DATA)
-                nef_nnef_dr_handle_policy_data(stream, &message);
+                nnef_dr_handle_policy_data(stream, &message);
                 break;
 
             DEFAULT

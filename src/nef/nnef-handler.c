@@ -20,7 +20,7 @@
 #include "sbi-path.h"
 #include "nnef-handler.h"
 
-bool nef_nnef_dr_handle_subscription_authentication(
+bool nnef_dr_handle_subscription_authentication(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
 {
     int rv;
@@ -249,7 +249,7 @@ bool nef_nnef_dr_handle_subscription_authentication(
     return false;
 }
 
-bool nef_nnef_dr_handle_subscription_context(
+bool nnef_dr_handle_subscription_context(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
 {
     ogs_sbi_message_t sendmsg;
@@ -415,7 +415,7 @@ bool nef_nnef_dr_handle_subscription_context(
     return false;
 }
 
-bool nef_nnef_dr_handle_subscription_provisioned(
+bool nnef_dr_handle_subscription_provisioned(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
 {
     int rv, status = 0;
@@ -1050,7 +1050,7 @@ cleanup:
     return false;
 }
 
-bool nef_nnef_dr_handle_policy_data(
+bool nnef_dr_handle_policy_data(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
 {
     int rv, i, status = 0;
