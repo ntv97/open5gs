@@ -19,6 +19,7 @@
 
 #include "sbi-path.h"
 #include "nnef-handler.h"
+#include <stdio.h>
 
 void nef_state_initial(ogs_fsm_t *s, nef_event_t *e)
 {
@@ -117,7 +118,19 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
             END
             break;
 
+	CASE(OGS_SBI_SERVICE_NAME_NNEF_PFDMANAGEMENT)
+            printf("NEFFFFFF PFDMANAGEMENT ");
+            SWITCH(message.h.resource.component[0])
+            CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
+	    	printf("NEFFFFFF APPLICATIONS RESOURCE ");
+	    DEFAULT
+		ogs_error("Invalid resource name [%s]",
+                        message.h.resource.component[0]);
+	    END
+	    break;
+
         CASE(OGS_SBI_SERVICE_NAME_NUDR_DR)
+	    printf("NEFFFFFF NUDR DR");
             SWITCH(message.h.resource.component[0])
             CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA)
                 SWITCH(message.h.resource.component[2])
@@ -135,6 +148,7 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
                     CASE(OGS_SBI_RESOURCE_NAME_PROVISIONED_DATA)
                         SWITCH(message.h.method)
                         CASE(OGS_SBI_HTTP_METHOD_GET)
+				printf("NEFFFFFF NUDR DR");
                             nnef_dr_handle_subscription_provisioned(
                                     stream, &message);
                             break;
