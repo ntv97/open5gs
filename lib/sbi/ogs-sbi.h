@@ -84,6 +84,11 @@
 #include "model/sec_negotiate_rsp_data.h"
 #include "model/patch_item.h"
 #include "model/ue_authentication_ctx.h"
+#include "model/application_for_pfd_request.h"
+#include "model/notification_push.h"
+#include "model/pfd_change_report.h"
+#include "model/pfd_data_for_app.h"
+#include "model/pfd_subscription.h"
 
 #include "custom/links.h"
 

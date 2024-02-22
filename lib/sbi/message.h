@@ -147,6 +147,7 @@ extern "C" {
 #define OGS_SBI_RESOURCE_NAME_EXCHANGE_CAPABILITY   "exchange-capability"
 
 #define OGS_SBI_RESOURCE_NAME_APPLICATIONS	    "applications"
+#define OGS_SBI_RESOURCE_NAME_PARTIAL_PULL	     "partial-pull"
 
 #define OGS_SBI_PATCH_PATH_NF_STATUS                "/nfStatus"
 #define OGS_SBI_PATCH_PATH_LOAD                     "/load"

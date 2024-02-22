@@ -1,0 +1,173 @@
+#include <stdlib.h>
+#include <string.h>
+#include <stdio.h>
+#include "notification_push.h"
+
+OpenAPI_notification_push_t *OpenAPI_notification_push_create (
+    list_t *app_ids,
+    int allowed_delay,
+    pfd_operation_t *pfd_op
+    ) {
+    nOpenAPI_otification_push_t *notification_push_local_var = ogs_malloc(sizeof(notification_push_t));
+    ogs_assert(notification_push_local_var)
+
+    notification_push_local_var->app_ids = app_ids;
+    notification_push_local_var->allowed_delay = allowed_delay;
+    notification_push_local_var->pfd_op = pfd_op;
+
+    return notification_push_local_var;
+}
+
+
+void OpenAPI_notification_push_free(OpenAPI_notification_push_t *notification_push) {
+    OpenAPI_lnode_t *node = NULL;
+
+    if(NULL == notification_push){
+        return ;
+    }
+    if (access_token_req->requester_snssai_list) {
+        OpenAPI_list_for_each(access_token_req->requester_snssai_list, node) {
+            OpenAPI_snssai_free(node->data);
+        }
+        OpenAPI_list_free(access_token_req->requester_snssai_list);
+        access_token_req->requester_snssai_list = NULL;
+    }
+
+    if (notification_push->app_ids) {
+        OpenAPI_list_for_each(notification_push->app_ids, node) {
+            //OpenAPI_app_ids_free(node->data);
+        }
+        list_freeList(notification_push->app_ids);
+        notification_push->app_ids = NULL;
+    }
+    if (notification_push->pfd_op) {
+        pfd_operation_free(notification_push->pfd_op);
+        notification_push->pfd_op = NULL;
+    }
+    ogs_free(notification_push);
+}
+
+cJSON *OpenAPI_notification_push_convertToJSON(OpenAPI_notification_push_t *notification_push) {
+    cJSON *item = cJSON_CreateObject();
+
+    // notification_push->app_ids
+    if (!notification_push->app_ids) {
+        goto fail;
+    }
+    cJSON *app_ids = cJSON_AddArrayToObject(item, "appIds");
+    if(app_ids == NULL) {
+        goto fail; //primitive container
+    }
+
+    listEntry_t *app_idsListEntry;
+    list_ForEach(app_idsListEntry, notification_push->app_ids) {
+    if(cJSON_AddStringToObject(app_ids, "", (char*)app_idsListEntry->data) == NULL)
+    {
+        goto fail;
+    }
+    }
+
+
+    // notification_push->allowed_delay
+    if(notification_push->allowed_delay) {
+    if(cJSON_AddNumberToObject(item, "allowedDelay", notification_push->allowed_delay) == NULL) {
+    goto fail; //Numeric
+    }
+    }
+
+
+    // notification_push->pfd_op
+    if(notification_push->pfd_op) {
+    cJSON *pfd_op_local_JSON = pfd_operation_convertToJSON(notification_push->pfd_op);
+    if(pfd_op_local_JSON == NULL) {
+    goto fail; //model
+    }
+    cJSON_AddItemToObject(item, "pfdOp", pfd_op_local_JSON);
+    if(item->child == NULL) {
+    goto fail;
+    }
+    }
+
+    return item;
+fail:
+    if (item) {
+        cJSON_Delete(item);
+    }
+    return NULL;
+}
+
+OpenAPI_notification_push_t *OpenAPI_notification_push_parseFromJSON(cJSON *notification_pushJSON) {
+    notification_push_t *notification_push_local_var = NULL;
+
+    // define the local list for notification_push->app_ids
+    list_t *app_idsList = NULL;
+
+    // define the local variable for notification_push->pfd_op
+    pfd_operation_t *pfd_op_local_nonprim = NULL;
+
+    // notification_push->app_ids
+    cJSON *app_ids = cJSON_GetObjectItemCaseSensitive(notification_pushJSON, "appIds");
+    if (!app_ids) {
+        goto end;
+    }
+
+    
+    cJSON *app_ids_local = NULL;
+    if(!cJSON_IsArray(app_ids)) {
+        goto end;//primitive container
+    }
+    app_idsList = list_createList();
+
+    cJSON_ArrayForEach(app_ids_local, app_ids)
+    {
+        if(!cJSON_IsString(app_ids_local))
+        {
+            goto end;
+        }
+        list_addElement(app_idsList , strdup(app_ids_local->valuestring));
+    }
+
+    // notification_push->allowed_delay
+    cJSON *allowed_delay = cJSON_GetObjectItemCaseSensitive(notification_pushJSON, "allowedDelay");
+    if (allowed_delay) { 
+    if(!cJSON_IsNumber(allowed_delay))
+    {
+    goto end; //Numeric
+    }
+    }
+
+    // notification_push->pfd_op
+    cJSON *pfd_op = cJSON_GetObjectItemCaseSensitive(notification_pushJSON, "pfdOp");
+    if (pfd_op) { 
+    pfd_op_local_nonprim = pfd_operation_parseFromJSON(pfd_op); //nonprimitive
+    }
+
+
+    notification_push_local_var = notification_push_create (
+        app_idsList,
+        allowed_delay ? allowed_delay->valuedouble : 0,
+        pfd_op ? pfd_op_local_nonprim : NULL
+        );
+
+    return notification_push_local_var;
+end:
+    if (app_idsList) {
+        listEntry_t *listEntry = NULL;
+        list_ForEach(listEntry, app_idsList) {
+            free(listEntry->data);
+            listEntry->data = NULL;
+        }
+        list_freeList(app_idsList);
+        app_idsList = NULL;
+    }
+    if (pfd_op_local_nonprim) {
+        pfd_operation_free(pfd_op_local_nonprim);
+        pfd_op_local_nonprim = NULL;
+    }
+    return NULL;
+
+}
+
+OpenAPI_notification_push_t OpenAPI_notification_push_copy(OpenAPI_notification_push_t *src, OpenAPI_notification_push_t *dst) {
+
+}

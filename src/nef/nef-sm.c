@@ -123,10 +123,19 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
             SWITCH(message.h.resource.component[0])
             CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
 	    	printf("NEFFFFFF APPLICATIONS RESOURCE \n");
+	    	SWITCH(message.h.resource.component[1])
+		CASE(OGS_SBI_RESOURCE_NAME_PARTIAL_PULL)
+			printf("Partial Pull\n");
+			break;
+		CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTIONS)
+			printf("Subscriptions\n");
+			break;
+		DEFAULT
+			ogs_error("Invalid resource name [%s]",
+                        message.h.resource.component[1]);
+		END
 	    	break;
 	    DEFAULT
-		 ogs_error("Vaalid resource name [%s]",
-                        OGS_SBI_RESOURCE_NAME_APPLICATIONS);
 		ogs_error("Invalid resource name [%s]",
                         message.h.resource.component[0]);
 	    END
