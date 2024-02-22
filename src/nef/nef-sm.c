@@ -119,11 +119,14 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
             break;
 
 	CASE(OGS_SBI_SERVICE_NAME_NNEF_PFDMANAGEMENT)
-            printf("NEFFFFFF PFDMANAGEMENT ");
+            printf("NEFFFFFF PFDMANAGEMENT \n");
             SWITCH(message.h.resource.component[0])
             CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
-	    	printf("NEFFFFFF APPLICATIONS RESOURCE ");
+	    	printf("NEFFFFFF APPLICATIONS RESOURCE \n");
+	    	break;
 	    DEFAULT
+		 ogs_error("Vaalid resource name [%s]",
+                        OGS_SBI_RESOURCE_NAME_APPLICATIONS);
 		ogs_error("Invalid resource name [%s]",
                         message.h.resource.component[0]);
 	    END
