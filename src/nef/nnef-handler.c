@@ -20,6 +20,25 @@
 #include "sbi-path.h"
 #include "nnef-handler.h"
 
+bool nnef_pfd_management_handle_create_subscription(
+        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message) {
+	ogs_error("Handle create pfd subscription");
+        return true;
+}
+
+bool nnef_pfd_management_handle_fetch(
+	ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
+{
+	ogs_error("Handle fetch pfd");
+	return true;
+}
+
+bool nnef_pfd_managemnet_handle_fetch_partial_pull(
+        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message) {
+	ogs_error("Handle fetch pfd by partial pull");
+        return true;
+}
+
 bool nnef_dr_handle_subscription_authentication(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
 {
