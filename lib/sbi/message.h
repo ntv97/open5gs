@@ -546,6 +546,8 @@ typedef struct ogs_sbi_message_s {
     OpenAPI_sec_negotiate_req_data_t *SecNegotiateReqData;
     OpenAPI_sec_negotiate_rsp_data_t *SecNegotiateRspData;
 
+    OpenAPI_pfd_data_for_app_t *PfdDataForApp;
+
     ogs_sbi_links_t *links;
 
 #define OGS_SBI_MAX_NUM_OF_PART 8

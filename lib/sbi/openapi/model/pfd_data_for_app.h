@@ -44,10 +44,10 @@ OpenAPI_pfd_data_for_app_t *OpenAPI_pfd_data_for_app_create(
 void OpenAPI_pfd_data_for_app_free(OpenAPI_pfd_data_for_app_t *pfd_data_for_app);
 OpenAPI_pfd_data_for_app_t *OpenAPI_pfd_data_for_app_parseFromJSON(cJSON *pfd_data_for_appJSON);
 cJSON *OpenAPI_pfd_data_for_app_convertToJSON(OpenAPI_pfd_data_for_app_t *pfd_data_for_app);
-OpenAPI_pfd_data_for_app_t OpenAPI_pfd_data_for_app_copy(OpenAPI_pfd_data_for_app_t *src, OpenAPI_pfd_data_for_app_t *dst);
+OpenAPI_pfd_data_for_app_t *OpenAPI_pfd_data_for_app_copy(OpenAPI_pfd_data_for_app_t *src, OpenAPI_pfd_data_for_app_t *dst);
 
 #ifdef __cplusplus
 }
 #endif
-#endif /* _pfd_data_for_app_H_ */
+#endif /* OpenAPI_pfd_data_for_app_H_ */
 

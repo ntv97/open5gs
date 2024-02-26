@@ -190,6 +190,10 @@ void ogs_sbi_message_free(ogs_sbi_message_t *message)
     if (message->SecNegotiateRspData)
         OpenAPI_sec_negotiate_rsp_data_free(message->SecNegotiateRspData);
 
+    //
+    if (message->PfdDataForApp)	
+	OpenAPI_pfd_data_for_app_free(message->PfdDataForApp);
+
     /* HTTP Part */
     for (i = 0; i < message->num_of_part; i++) {
         if (message->part[i].pkbuf)
@@ -1338,6 +1342,11 @@ static char *build_json(ogs_sbi_message_t *message)
     } else if (message->SecNegotiateRspData) {
         item = OpenAPI_sec_negotiate_rsp_data_convertToJSON(
             message->SecNegotiateRspData);
+        ogs_assert(item);
+    } else if (message->PfdDataForApp) {
+	ogs_error("Pfd Data For App");
+	item = OpenAPI_pfd_data_for_app_convertToJSON(
+            message->PfdDataForApp);
         ogs_assert(item);
     }
 

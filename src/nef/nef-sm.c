@@ -119,32 +119,32 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
             break;
 
 	CASE(OGS_SBI_SERVICE_NAME_NNEF_PFDMANAGEMENT)
-            printf("NEFFFFFF PFDMANAGEMENT \n");
-            SWITCH(message.h.resource.component[0])
-            CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
-	    	printf("NEFFFFFF APPLICATIONS RESOURCE \n");
-	    	SWITCH(message.h.resource.component[1])
-		CASE(OGS_SBI_RESOURCE_NAME_PARTIAL_PULL)
-			printf("Partial Pull\n");
-			nnef_pfd_managemnet_handle_fetch_partial_pull(
+		printf("NEFFFFFF PFDMANAGEMENT \n");
+
+		SWITCH(message.h.resource.component[0])
+		CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
+			printf("NEFFFFFF APPLICATIONS RESOURCE \n");
+			SWITCH(message.h.resource.component[1])
+
+			CASE(OGS_SBI_RESOURCE_NAME_PARTIAL_PULL)
+				printf("Partial Pull\n");
+				nnef_pfd_managemnet_handle_fetch_partial_pull(
 					stream, &message);
-			break;
+				break;
+			DEFAULT
+				nnef_pfd_management_handle_fetch(stream, &message);
+			END
+				break;
 		CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTIONS)
 			printf("Subscriptions\n");
 			nnef_pfd_management_handle_create_subscription(
 					stream, &message);
 			break;
-		DEFAULT
-			ogs_error("Invalid resource name [%s]",
-                        message.h.resource.component[1]);
-			//break;
-		nnef_pfd_management_handle_fetch(stream, &message);
-		END
-	    	break;
 	    DEFAULT
 		ogs_error("Invalid resource name [%s]",
                         message.h.resource.component[0]);
 	    END
+		ogs_sbi_message_free(&message);
 	    break;
 
         CASE(OGS_SBI_SERVICE_NAME_NUDR_DR)
