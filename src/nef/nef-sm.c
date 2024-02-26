@@ -119,15 +119,15 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
             break;
 
 	CASE(OGS_SBI_SERVICE_NAME_NNEF_PFDMANAGEMENT)
-		printf("NEFFFFFF PFDMANAGEMENT \n");
+		ogs_error("NEFFFFFF PFDMANAGEMENT \n");
 
 		SWITCH(message.h.resource.component[0])
 		CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
-			printf("NEFFFFFF APPLICATIONS RESOURCE \n");
+			ogs_error("NEFFFFFF APPLICATIONS RESOURCE \n");
 			SWITCH(message.h.resource.component[1])
 
 			CASE(OGS_SBI_RESOURCE_NAME_PARTIAL_PULL)
-				printf("Partial Pull\n");
+				ogs_error("Partial Pull\n");
 				nnef_pfd_managemnet_handle_fetch_partial_pull(
 					stream, &message);
 				break;
@@ -136,7 +136,7 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
 			END
 				break;
 		CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTIONS)
-			printf("Subscriptions\n");
+			ogs_error("Subscriptions\n");
 			nnef_pfd_management_handle_create_subscription(
 					stream, &message);
 			break;
@@ -148,7 +148,7 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
 	    break;
 
         CASE(OGS_SBI_SERVICE_NAME_NUDR_DR)
-	    printf("NEFFFFFF NUDR DR");
+	    ogs_error("NEFFFFFF NUDR DR");
             SWITCH(message.h.resource.component[0])
             CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA)
                 SWITCH(message.h.resource.component[2])

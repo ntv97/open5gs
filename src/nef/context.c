@@ -29,7 +29,7 @@ void nef_context_init(void)
 {
     ogs_assert(context_initialized == 0);
 
-    /* Initialize UDR context */
+    /* Initialize NEF context */
     memset(&self, 0, sizeof(nef_context_t));
 
     ogs_log_install_domain(&__ogs_dbi_domain, "dbi", ogs_core()->log.level);

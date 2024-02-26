@@ -34,7 +34,7 @@ OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_create(
 void OpenAPI_pfd_subscription_free(OpenAPI_pfd_subscription_t *pfd_subscription);
 OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_parseFromJSON(cJSON *pfd_subscriptionJSON);
 cJSON *OpenAPI_pfd_subscription_convertToJSON(OpenAPI_pfd_subscription_t *pfd_subscription);
-OpenAPI_pfd_subscription_t OpenAPI_pfd_subscription_copy(OpenAPI_pfd_subscription_t *src, OpenAPI_pfd_subscription_t *dst);
+OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_copy(OpenAPI_pfd_subscription_t *src, OpenAPI_pfd_subscription_t *dst);
 
 #ifdef __cplusplus
 }

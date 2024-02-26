@@ -1344,10 +1344,11 @@ static char *build_json(ogs_sbi_message_t *message)
             message->SecNegotiateRspData);
         ogs_assert(item);
     } else if (message->PfdDataForApp) {
-	ogs_error("Pfd Data For App");
 	item = OpenAPI_pfd_data_for_app_convertToJSON(
             message->PfdDataForApp);
         ogs_assert(item);
+    } else if (message->PfdSubscription) {
+	item = OpenAPI_pfd_subscription_convertToJSON(message->PfdSubscription);	
     }
 
     if (item) {
@@ -1745,6 +1746,34 @@ static int parse_json(ogs_sbi_message_t *message,
             END
             break;
 
+	CASE(OGS_SBI_SERVICE_NAME_NNEF_PFDMANAGEMENT)
+	    SWITCH(message->h.resource.component[0])
+            CASE(OGS_SBI_RESOURCE_NAME_APPLICATIONS)
+		SWITCH(message->h.resource.component[1])
+		CASE(OGS_SBI_RESOURCE_NAME_PARTIAL_PULL)
+		    message->ApplicationForPfdRequest = 
+				OpenAPI_application_for_pfd_request_parseFromJSON(item);
+		    if (!message->ApplicationForPfdRequest) {
+			rv = OGS_ERROR;
+			ogs_error("JSON parse error");
+		    }
+		     break;
+		DEFAULT
+		    rv = OGS_ERROR;
+		    ogs_error("Unknown resource name [%s]",
+					message->h.resource.component[1]);
+		END
+		    break;
+	    CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTIONS)
+		    message->PfdSubscription = 
+		    	OpenAPI_pfd_subscription_parseFromJSON(item);
+		break;
+	    DEFAULT
+		rv = OGS_ERROR;
+                ogs_error("Unknown resource name [%s]",
+                        message->h.resource.component[0]);
+	    END
+                break;
         CASE(OGS_SBI_SERVICE_NAME_NUDR_DR)
             SWITCH(message->h.resource.component[0])
             CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA)

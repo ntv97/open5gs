@@ -11,7 +11,7 @@ OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_create(
     char *supported_features
     ) {
     OpenAPI_pfd_subscription_t *pfd_subscription_local_var = ogs_malloc(sizeof(OpenAPI_pfd_subscription_t));
-    ogs_assert(!pfd_subscription_local_var);
+    ogs_assert(pfd_subscription_local_var);
 
     pfd_subscription_local_var->application_ids = application_ids;
     pfd_subscription_local_var->notify_uri = notify_uri;
@@ -29,7 +29,7 @@ void OpenAPI_pfd_subscription_free(OpenAPI_pfd_subscription_t *pfd_subscription)
     
     if (pfd_subscription->application_ids) {
         OpenAPI_list_for_each(pfd_subscription->application_ids, node) {
-            OpenAPI_app_ids_free(node->data);
+            ogs_free(node->data);
         }
         OpenAPI_list_free(pfd_subscription->application_ids);
         pfd_subscription->application_ids = NULL;
@@ -58,17 +58,15 @@ cJSON *OpenAPI_pfd_subscription_convertToJSON(OpenAPI_pfd_subscription_t *pfd_su
     item = cJSON_CreateObject();
     if (pfd_subscription->application_ids) {
     cJSON *application_ids = cJSON_AddArrayToObject(item, "applicationIds");
-    if (applicationIds == NULL) {
+    if (application_ids == NULL) {
         ogs_error("OpenAPI_pfd_subscription_convertToJSON() failed [applicationIds]");
         goto end;
     }
     OpenAPI_list_for_each(pfd_subscription->application_ids, node) {
-        cJSON *itemLocal = OpenAPI_app_id_convertToJSON(node->data);
-        if (itemLocal == NULL) {
+	if (cJSON_AddStringToObject(application_ids, "", (char*)node->data) == NULL) {
 	    ogs_error("OpenAPI_pfd_subscription_convertToJSON() failed [applicationIds]");
             goto end;
         }
-        cJSON_AddItemToArray(application_ids, itemLocal);
     }
     }
 
@@ -97,9 +95,8 @@ end:
 }
 
 OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_parseFromJSON(cJSON *pfd_subscriptionJSON) {
-
     OpenAPI_pfd_subscription_t *pfd_subscription_local_var = NULL;
-     OpenAPI_lnode_t *node = NULL;
+    OpenAPI_lnode_t *node = NULL;
     OpenAPI_list_t *application_idsList = NULL;
     cJSON *application_ids = NULL;
     cJSON *notify_uri = NULL;
@@ -117,17 +114,21 @@ OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_parseFromJSON(cJSON *pfd_su
         application_idsList = OpenAPI_list_create();
 
         cJSON_ArrayForEach(application_ids_local, application_ids) {
-            if (!cJSON_IsObject(application_ids_local)) {
-		ogs_error("OpenAPI_pfd_subscription_parseFromJSON failed [application_ids]");
+            if (!cJSON_IsString(application_ids_local)) {
+                ogs_error("OpenAPI_pfd_subscription_parseFromJSON() failed [application_ids]");
                 goto end;
             }
-            OpenAPI_application_id_t *application_idsItem = OpenAPI_application_id_parseFromJSON(application_ids_local);
-            if (!application_idsItem) {
-                ogs_error("No app_idsItem");
-                goto end;
-            }
-            OpenAPI_list_add(application_idsList, application_idsItem);
+            OpenAPI_list_add(application_idsList, ogs_strdup(application_ids_local->valuestring));
         }
+	/*cJSON_ArrayForEach(urls_local, urls) {
+            double *localDouble = NULL;
+            int *localInt = NULL;
+            if (!cJSON_IsString(urls_local)) {
+                ogs_error("OpenAPI_pfd_content_parseFromJSON() failed [urls]");
+                goto end;
+            }
+            OpenAPI_list_add(urlsList, ogs_strdup(urls_local->valuestring));
+        }*/
     }
 
     // pfd_subscription->notify_uri
@@ -148,7 +149,8 @@ OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_parseFromJSON(cJSON *pfd_su
     }
     }
 
-    pfd_subscription_local_var = pfd_subscription_create (
+    ogs_error("endd of parse");
+    pfd_subscription_local_var = OpenAPI_pfd_subscription_create (
         application_ids ? application_idsList : NULL,
         notify_uri && !cJSON_IsNull(notify_uri) ? strdup(notify_uri->valuestring) : NULL,
         supported_features && !cJSON_IsNull(supported_features) ? strdup(supported_features->valuestring) : NULL
@@ -168,7 +170,7 @@ end:
 
 }
 
-OpenAPI_pfd_subscription_t OpenAPI_pfd_subscription_copy(OpenAPI_pfd_subscription_t *src, OpenAPI_pfd_subscription_t *dst) {
+OpenAPI_pfd_subscription_t *OpenAPI_pfd_subscription_copy(OpenAPI_pfd_subscription_t *src, OpenAPI_pfd_subscription_t *dst) {
 	cJSON *item = NULL;
     char *content = NULL;
 
@@ -194,7 +196,7 @@ OpenAPI_pfd_subscription_t OpenAPI_pfd_subscription_copy(OpenAPI_pfd_subscriptio
         return NULL;
     }
 
-    OpenAPI_pfd_content_free(dst);
+    OpenAPI_pfd_subscription_free(dst);
     dst = OpenAPI_pfd_subscription_parseFromJSON(item);
     cJSON_Delete(item);
 

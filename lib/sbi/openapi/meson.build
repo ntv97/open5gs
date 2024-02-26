@@ -1370,6 +1370,9 @@ libsbi_openapi_sources = files('''
 
 
     model/pfd_data_for_app.c
+    model/application_for_pfd_request.c
+    model/pfd_subscription.c
+
 '''.split())
 
 libsbi_openapi_inc = include_directories('.')

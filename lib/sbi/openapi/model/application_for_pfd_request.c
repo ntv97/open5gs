@@ -67,7 +67,6 @@ end:
 }
 
 OpenAPI_application_for_pfd_request_t *OpenAPI_application_for_pfd_request_parseFromJSON(cJSON *application_for_pfd_requestJSON) {
-
     OpenAPI_application_for_pfd_request_t *application_for_pfd_request_local_var = NULL;
     OpenAPI_lnode_t *node = NULL;
     cJSON *application_id = NULL;
@@ -82,6 +81,7 @@ OpenAPI_application_for_pfd_request_t *OpenAPI_application_for_pfd_request_parse
         ogs_error("OpenAPI_application_for_pfd_request_parseFromJSON(cJSON failed [applicationId]");
         goto end;
     }
+    ogs_error("app id parsed");
 
     pfd_timestamp = cJSON_GetObjectItemCaseSensitive(application_for_pfd_requestJSON, "pfdTimestamp");
     if (!pfd_timestamp) {
@@ -94,10 +94,11 @@ OpenAPI_application_for_pfd_request_t *OpenAPI_application_for_pfd_request_parse
     }
 
     application_for_pfd_request_local_var = OpenAPI_application_for_pfd_request_create (
-        ogs_strdup(application_id->valuestring),
-	ogs_strdup(pfd_timestamp->valuestring),
+	application_id && !cJSON_IsNull(application_id) ? ogs_strdup(application_id->valuestring) : NULL,
+	pfd_timestamp && !cJSON_IsNull(pfd_timestamp) ? ogs_strdup(pfd_timestamp->valuestring) : NULL
     );
 
+    ogs_error("success parsing");
     return application_for_pfd_request_local_var;
 end:
     return NULL;

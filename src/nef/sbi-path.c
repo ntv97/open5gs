@@ -52,7 +52,7 @@ int nef_sbi_open(void)
         ogs_sbi_nf_service_add_version(
                     service, OGS_SBI_API_V1, OGS_SBI_API_V1_0_0, NULL);
         ogs_sbi_nf_service_add_allowed_nf_type(service, OpenAPI_nf_type_AF);
-        ogs_sbi_nf_service_add_allowed_nf_type(service, OpenAPI_nf_type_PCF);
+        ogs_sbi_nf_service_add_allowed_nf_type(service, OpenAPI_nf_type_SMF);
 
     }
     // OGS_SBI_SERVICE_NAME_NNEF_SMCONTEXT

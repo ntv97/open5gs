@@ -147,7 +147,7 @@ extern "C" {
 #define OGS_SBI_RESOURCE_NAME_EXCHANGE_CAPABILITY   "exchange-capability"
 
 #define OGS_SBI_RESOURCE_NAME_APPLICATIONS	    "applications"
-#define OGS_SBI_RESOURCE_NAME_PARTIAL_PULL	     "partial-pull"
+#define OGS_SBI_RESOURCE_NAME_PARTIAL_PULL	    "partialpull"
 
 #define OGS_SBI_PATCH_PATH_NF_STATUS                "/nfStatus"
 #define OGS_SBI_PATCH_PATH_LOAD                     "/load"
@@ -547,6 +547,8 @@ typedef struct ogs_sbi_message_s {
     OpenAPI_sec_negotiate_rsp_data_t *SecNegotiateRspData;
 
     OpenAPI_pfd_data_for_app_t *PfdDataForApp;
+    OpenAPI_application_for_pfd_request_t *ApplicationForPfdRequest;
+    OpenAPI_pfd_subscription_t *PfdSubscription;
 
     ogs_sbi_links_t *links;
 

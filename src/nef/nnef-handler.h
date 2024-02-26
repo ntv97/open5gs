@@ -31,7 +31,7 @@ bool nnef_pfd_management_handle_create_subscription(
 bool nnef_pfd_management_handle_fetch(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
 bool nnef_pfd_management_handle_fetch_individual(
-        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
+        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message, char* app_id);
 bool nnef_pfd_managemnet_handle_fetch_partial_pull(
 	ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
 bool nnef_dr_handle_subscription_authentication(
