@@ -34,15 +34,6 @@ bool nnef_pfd_management_handle_fetch_individual(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *message, char* app_id);
 bool nnef_pfd_managemnet_handle_fetch_partial_pull(
 	ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
-bool nnef_dr_handle_subscription_authentication(
-        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
-bool nnef_dr_handle_subscription_context(
-        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
-bool nnef_dr_handle_subscription_provisioned(
-        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
-
-bool nnef_dr_handle_policy_data(
-        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message);
 
 #ifdef __cplusplus
 }

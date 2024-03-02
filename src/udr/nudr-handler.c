@@ -89,7 +89,6 @@ bool udr_nudr_dr_handle_application_pfds(
                 message, "Invalid method",
                 message->h.method));
     	END
-	    break;
 	    
     return true;
 }
