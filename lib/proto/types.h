@@ -185,6 +185,14 @@ extern "C" {
 #define OGS_IPV4_FRAMED_ROUTES_STRING "ipv4_framed_routes"
 #define OGS_IPV6_FRAMED_ROUTES_STRING "ipv6_framed_routes"
 
+#define OGS_APPLICATION_ID_STRING "application_id"
+#define OGS_PFDS_STRING "pfds"
+#define OGS_CACHING_TIME_STRING "caching_time"
+#define OGS_SUPPORTED_FEATURES_STRING "supp_feat"
+#define OGS_RESET_IDS_STRING "reset_ids"
+#define OGS_IS_ALLOWED_DELAY_STRING "is_allowed_delay"
+#define OGS_ALLOWED_DELAY_STRING "allowed_delay"
+
 /************************************
  * PLMN_ID Structure                */
 typedef struct ogs_plmn_id_s {

@@ -20,6 +20,80 @@
 #include "sbi-path.h"
 #include "nudr-handler.h"
 
+bool udr_nudr_dr_handle_application_pfds(
+        ogs_sbi_stream_t *stream, ogs_sbi_message_t *message)
+{	
+    int rv;
+    ogs_sbi_message_t sendmsg;
+    ogs_sbi_response_t *response = NULL;
+    ogs_dbi_pfd_data_t pfd_data;
+
+    char caching_time[OGS_KEYSTRLEN(OGS_KEY_LEN)];
+    char supp_feat[OGS_KEYSTRLEN(OGS_KEY_LEN)];
+    char allowed_delay_string[OGS_KEYSTRLEN(OGS_KEY_LEN)];
+
+    uint64_t allowed_delay = 0;
+
+    char *app_id = NULL;
+
+    OpenAPI_pfd_data_for_app_ext_t PfdDataForAppExt;
+    OpenAPI_list_t *pfds = OpenAPI_list_create();
+    OpenAPI_list_t *reset_ids = OpenAPI_list_create();
+    OpenAPI_lnode_t *node = NULL;
+
+    ogs_assert(stream);
+    ogs_assert(message);
+
+    app_id = message->h.resource.component[2];	
+	if (!app_id) {
+        ogs_error("No APPLICATION ID");
+        ogs_assert(true ==
+            ogs_sbi_server_send_error(stream, OGS_SBI_HTTP_STATUS_BAD_REQUEST,
+                message, "No APPLICATION IDD", NULL));
+        return false;
+    }
+
+	rv = ogs_dbi_pfd_data(app_id, &pfd_data);
+    if (rv != OGS_OK) {
+        ogs_warn("[%s] Cannot find APPLICATION ID in DB", app_id);
+        ogs_assert(true ==
+            ogs_sbi_server_send_error(stream, OGS_SBI_HTTP_STATUS_NOT_FOUND,
+                message, "Cannot APPLICATION ID", app_id));
+        return false;
+    }
+	SWITCH(message->h.method)
+	CASE(OGS_SBI_HTTP_METHOD_GET)
+		memset(&PfdDataForAppExt, 0, sizeof(PfdDataForAppExt));
+		PfdDataForAppExt.application_id = app_id;
+		PfdDataForAppExt.pfds = pfds;
+		PfdDataForAppExt.caching_time = pfd_data.caching_time;
+		PfdDataForAppExt.supp_feat = pfd_data.supp_feat;
+		PfdDataForAppExt.reset_ids = reset_ids;
+		PfdDataForAppExt.is_allowed_delay = pfd_data.is_allowed_delay;
+		PfdDataForAppExt.allowed_delay = pfd_data.allowed_delay;
+
+		memset(&sendmsg, 0, sizeof(sendmsg));
+        sendmsg.PfdDataForAppExt = &PfdDataForAppExt;
+        response = ogs_sbi_build_response(
+                        &sendmsg, OGS_SBI_HTTP_STATUS_OK);
+        ogs_assert(response);
+        ogs_assert(true ==
+              ogs_sbi_server_send_response(stream, response));
+		break;
+	DEFAULT
+        ogs_error("Invalid method [%s]",
+                message->h.method);
+        ogs_assert(true ==
+            ogs_sbi_server_send_error(stream,
+                OGS_SBI_HTTP_STATUS_MEHTOD_NOT_ALLOWED,
+                message, "Invalid method",
+                message->h.method));
+    	END
+	    break;
+	    
+    return true;
+}
+
 bool udr_nudr_dr_handle_subscription_authentication(
         ogs_sbi_stream_t *stream, ogs_sbi_message_t *recvmsg)
 {

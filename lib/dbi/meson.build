@@ -24,6 +24,7 @@ libdbi_sources = files('''
     subscription.c
     session.c
     ims.c
+    application.c
 '''.split())
 
 libmongoc_dep = dependency('libmongoc-1.0')

@@ -132,14 +132,21 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
 					stream, &message);
 				break;
 			DEFAULT
-				nnef_pfd_management_handle_fetch(stream, &message);
+				ogs_error("Invalid HTTP method [%s]",
+                                    message.h.method);
 			END
 				break;
 		CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTIONS)
 			ogs_error("Subscriptions\n");
-			nnef_pfd_management_handle_create_subscription(
-					stream, &message);
-			break;
+			SWITCH(message.h.method)
+                CASE(OGS_SBI_HTTP_METHOD_POST)
+					nnef_pfd_management_handle_create_subscription(
+              			      stream, &message);
+                    break;
+			DEFAULT
+				ogs_error("Method [%s] not implemented", message.h.method);
+			END
+				break;
 	    DEFAULT
 		ogs_error("Invalid resource name [%s]",
                         message.h.resource.component[0]);

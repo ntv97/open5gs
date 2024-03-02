@@ -45,6 +45,7 @@ typedef struct ogs_mongoc_s {
 
     struct {
         void *subscriber;
+	void *application;
     } collection;
 } ogs_mongoc_t;
 

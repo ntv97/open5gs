@@ -104,6 +104,8 @@ extern "C" {
 #define OGS_SBI_RESOURCE_NAME_AMF_3GPP_ACCESS       "amf-3gpp-access"
 #define OGS_SBI_RESOURCE_NAME_SMF_REGISTRATIONS     "smf-registrations"
 
+#define OGS_SBI_RESOURCE_NAME_PFDS		    "pfds"
+#define OGS_SBI_RESOURCE_NAME_APPLICATION_DATA 	    "application-data"
 #define OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA     "subscription-data"
 #define OGS_SBI_RESOURCE_NAME_AUTHENTICATION_DATA   "authentication-data"
 #define OGS_SBI_RESOURCE_NAME_AUTHENTICATION_SUBSCRIPTION \
@@ -549,6 +551,7 @@ typedef struct ogs_sbi_message_s {
     OpenAPI_pfd_data_for_app_t *PfdDataForApp;
     OpenAPI_application_for_pfd_request_t *ApplicationForPfdRequest;
     OpenAPI_pfd_subscription_t *PfdSubscription;
+    OpenAPI_pfd_data_for_app_ext_t *PfdDataForAppExt;
 
     ogs_sbi_links_t *links;
 

@@ -89,6 +89,7 @@
 #include "model/pfd_change_report.h"
 #include "model/pfd_data_for_app.h"
 #include "model/pfd_subscription.h"
+#include "model/pfd_data_for_app_ext.h"
 
 #include "custom/links.h"
 

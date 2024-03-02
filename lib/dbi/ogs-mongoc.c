@@ -170,6 +170,8 @@ int ogs_dbi_init(const char *db_uri)
     if (ogs_mongoc()->client && ogs_mongoc()->name) {
         self.collection.subscriber = mongoc_client_get_collection(
             ogs_mongoc()->client, ogs_mongoc()->name, "subscribers");
+	self.collection.application = mongoc_client_get_collection(
+	    ogs_mongoc()->client, ogs_mongoc()->name, "applications");
         ogs_assert(self.collection.subscriber);
     }
 

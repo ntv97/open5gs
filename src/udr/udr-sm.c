@@ -119,6 +119,24 @@ void udr_state_operational(ogs_fsm_t *s, udr_event_t *e)
 
         CASE(OGS_SBI_SERVICE_NAME_NUDR_DR)
             SWITCH(message.h.resource.component[0])
+	    // #define #define OGS_SBI_RESOURCE_NAME_APPLICATION_DATA "application-data"
+	    CASE(OGS_SBI_RESOURCE_NAME_APPLICATION_DATA)
+	    	SWITCH(message.h.resource.component[1])
+			CASE(OGS_SBI_RESOURCE_NAME_PFDS)
+				ogs_error("application data pfds");
+				udr_nudr_dr_handle_application_pfds(
+						stream, &message);
+				break;
+			DEFAULT
+				ogs_error("Invalid resource name [%s]",
+                        message.h.resource.component[1]);
+                ogs_assert(true ==
+                    ogs_sbi_server_send_error(stream,
+                        OGS_SBI_HTTP_STATUS_BAD_REQUEST, &message,
+                        "Unknown resource name",
+                        message.h.resource.component[1]));
+			END
+				break;
             CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA)
                 SWITCH(message.h.resource.component[2])
                 CASE(OGS_SBI_RESOURCE_NAME_AUTHENTICATION_DATA)

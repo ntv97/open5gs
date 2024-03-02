@@ -192,7 +192,14 @@ void ogs_sbi_message_free(ogs_sbi_message_t *message)
 
     //
     if (message->PfdDataForApp)	
-	OpenAPI_pfd_data_for_app_free(message->PfdDataForApp);
+		OpenAPI_pfd_data_for_app_free(message->PfdDataForApp);
+    if (message->ApplicationForPfdRequest)
+		OpenAPI_application_for_pfd_request_free(message->ApplicationForPfdRequest);
+	if (message->PfdSubscription)
+		OpenAPI_pfd_subscription_free(message->PfdSubscription);
+	if (message->PfdDataForAppExt)
+		OpenAPI_pfd_data_for_app_ext_free(message->PfdDataForAppExt);
+	
 
     /* HTTP Part */
     for (i = 0; i < message->num_of_part; i++) {
@@ -1344,11 +1351,13 @@ static char *build_json(ogs_sbi_message_t *message)
             message->SecNegotiateRspData);
         ogs_assert(item);
     } else if (message->PfdDataForApp) {
-	item = OpenAPI_pfd_data_for_app_convertToJSON(
+		item = OpenAPI_pfd_data_for_app_convertToJSON(
             message->PfdDataForApp);
         ogs_assert(item);
     } else if (message->PfdSubscription) {
-	item = OpenAPI_pfd_subscription_convertToJSON(message->PfdSubscription);	
+		item = OpenAPI_pfd_subscription_convertToJSON(message->PfdSubscription);	
+    } else if (message->PfdDataForAppExt) {
+		item = OpenAPI_pfd_data_for_app_ext_convertToJSON(message->PfdDataForAppExt);
     }
 
     if (item) {
@@ -1776,6 +1785,14 @@ static int parse_json(ogs_sbi_message_t *message,
                 break;
         CASE(OGS_SBI_SERVICE_NAME_NUDR_DR)
             SWITCH(message->h.resource.component[0])
+	    CASE(OGS_SBI_RESOURCE_NAME_APPLICATION_DATA)
+	    	message->PfdDataForAppExt =
+				OpenAPI_pfd_data_for_app_ext_parseFromJSON(item);
+		if (!message->PfdDataForAppExt) {
+		    rv = OGS_ERROR;
+		    ogs_error("JSON parse error");		
+		}
+		break;
             CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTION_DATA)
                 SWITCH(message->h.resource.component[2])
                 CASE(OGS_SBI_RESOURCE_NAME_AUTHENTICATION_DATA)
