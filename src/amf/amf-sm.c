@@ -277,7 +277,7 @@ void amf_state_operational(ogs_fsm_t *s, amf_event_t *e)
 
         SWITCH(sbi_message.h.service.name)
         CASE(OGS_SBI_SERVICE_NAME_NNRF_NFM)
-
+		ogs_error("******AMD NNRF NFM*************");
             SWITCH(sbi_message.h.resource.component[0])
             CASE(OGS_SBI_RESOURCE_NAME_NF_INSTANCES)
                 nf_instance = e->h.sbi.data;
