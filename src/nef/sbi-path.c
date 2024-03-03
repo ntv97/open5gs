@@ -77,3 +77,11 @@ void nef_sbi_close(void)
     ogs_sbi_client_stop_all();
     ogs_sbi_server_stop_all();
 }
+
+
+bool nef_sbi_send_request(
+        ogs_sbi_nf_instance_t *nf_instance, ogs_sbi_xact_t *xact) {
+	ogs_assert(nf_instance);
+   	ogs_assert(xact);
+   	return ogs_sbi_send_request_to_nf_instance(nf_instance, xact);
+}

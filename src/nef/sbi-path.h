@@ -29,6 +29,9 @@ extern "C" {
 int nef_sbi_open(void);
 void nef_sbi_close(void);
 
+bool nef_sbi_send_request(
+        ogs_sbi_nf_instance_t *nf_instance, ogs_sbi_xact_t *xact);
+
 #ifdef __cplusplus
 }
 #endif
