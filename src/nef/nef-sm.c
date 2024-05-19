@@ -102,8 +102,10 @@ void nef_state_operational(ogs_fsm_t *s, nef_event_t *e)
 				stream, &message);
 			break;
 		DEFAULT
-			ogs_error("Invalid HTTP method [%s]",
-                                    message.h.method);
+			nnef_pfd_management_handle_fetch(stream, 
+					&message);
+			//ogs_error("Invalid HTTP method [%s]",
+                          //          message.h.method);
 		END
 			break;
 		CASE(OGS_SBI_RESOURCE_NAME_SUBSCRIPTIONS)

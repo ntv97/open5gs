@@ -128,8 +128,6 @@ bool nnef_pfd_management_handle_fetch_individual(
         //Pfd_App.supported_features[0] = '8';
         Pfd_App.partial_flag = 1;
 
-
-
         memset(&sendmsg, 0, sizeof(sendmsg));
 
         ogs_assert(stream);
